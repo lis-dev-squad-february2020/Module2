@@ -1,0 +1,21 @@
+<form action="/books/add" method="POST">
+  <label for="">Title:</label>
+  <input type="text" name="title">
+
+  <select name="author" id="author">
+    <option>Choose an author</option>
+      {{#each authors}}
+        <option value="{{this._id}}">{{this.name}}</option>
+      {{/each}}
+  </select>
+
+  <label for="">Description:</label>
+  <input type="text" name="description">
+
+  <label for="">Rate:</label>
+  <input type="number" name="rating">
+
+  <button type="submit">ADD</button>
+
+  <button onclick="getCenas()">Get</button>
+</form>
