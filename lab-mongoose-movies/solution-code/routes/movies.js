@@ -55,7 +55,6 @@ router.get('/movies/:id/edit', (req, res, next) => {
       title: `Edit ${movie.title}`,
       movie: movie
     });
-    res.render('movies/show', { movie });
   })
   .catch(error => {
     next(error);

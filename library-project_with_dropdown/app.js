@@ -13,15 +13,30 @@ const MongoStore   = require('connect-mongo')(session);
 
 
 hbs.registerHelper('isSelected', ( author, bookAuthor ) => {
-  console.log("author", author);
-  console.log("bookAuthor", bookAuthor);
   if (author === bookAuthor) {
-    console.log("found it");
     return 'selected';
   } else {
     return '';
   }
 });
+
+hbs.registerHelper('multipleSelect', ( allAuthors, bookAuthors ) => {
+  let options = '';
+  allAuthors.forEach((author) => {
+      if (authorIsPresentInBook(author, bookAuthors)) {
+        options += `<option value=${author._id} selected>${author.name}</option>`;
+      } else {
+        options += `<option value=${author._id}>${author.name}</option>`;
+      }
+  });
+  return options;
+});
+
+function authorIsPresentInBook(author, bookAuthors) {
+  return bookAuthors.some(bookAuthor => {
+    return bookAuthor.name === author.name;
+  });
+}
 
 mongoose
   .connect('mongodb://localhost/library-project', {useNewUrlParser: true})

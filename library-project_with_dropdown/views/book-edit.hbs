@@ -5,10 +5,17 @@
   <label for="">Author:</label>
   <select name="author" id="author">
     <option>Choose an author</option>
-      {{#each authors}}
+      {{#each allAuthors}}
         <option value="{{this._id}}" {{{isSelected this.name ../book.author.0.name}}}>{{this.name}}</option>
       {{/each}}
   </select>
+
+  <select name="author" id="author" multiple>
+    <option>Choose an author</option>
+      {{{multipleSelect allAuthors book.author}}}
+  </select>
+
+
   <label for="">Description:</label>
   <input type="text" name="description" value="{{ book.description }}">
 

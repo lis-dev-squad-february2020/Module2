@@ -67,6 +67,8 @@ router.post('/books/edit', (req, res) => {
     rating
   } = req.body;
 
+  console.log('author being edited', author);
+
   Book.update({
       _id: bookId
     }, {
@@ -91,10 +93,10 @@ router.get('/books/edit', (req, res) => {
   Book.findById(bookId)
     .populate('author')
     .then(book => {
-      Author.find().then(authors => {
+      Author.find().then(allAuthors => {
         res.render('book-edit', {
           book,
-          authors
+          allAuthors
         });
       });
     })
