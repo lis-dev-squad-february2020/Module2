@@ -1,0 +1,15 @@
+<h1>{{title}}</h1>
+{{#if currentUser}}
+  <p>Welcome {{currentUser.username}}</p>
+{{/if}}
+<div>
+  {{#unless currentUser}}
+    <a href="/signup">Sign up</a>
+    <a href="/login">Login</a>
+  {{/unless}}
+  {{#if currentUser}}
+    <a href="/logout">Logout</a>
+    <a href="/main">main page (requires authentication)</a>
+    <a href="/private">private page (requires authentication)</a>
+  {{/if}}
+</div>
