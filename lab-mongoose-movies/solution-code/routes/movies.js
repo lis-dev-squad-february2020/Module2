@@ -3,6 +3,12 @@ const router = express.Router();
 
 const Movie = require('../models/movie');
 
+// GET -> get data
+// POST -> create data
+// PATCH -> update a whole document
+// PUT -> update just a single attribute of the document
+// DELETE -> delete a document
+
 /* GET home page. */
 router.get('/movies', (req, res, next) => {
   Movie.find()

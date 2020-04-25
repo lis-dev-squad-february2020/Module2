@@ -1,0 +1,37 @@
+<form action="/books/edit?book_id={{book._id}}" method="POST">
+  <label for="">Title:</label>
+  <input type="text" value="{{book.title}}" name="title">
+  <label for="">Author:</label>
+  <select name="author" id="author">
+    {{!-- Single Dropdown list 1. custom helper approach  --}}
+    <option>Choose an author</option>
+    {{#each allAuthors}}
+      <option value={{this._id}} {{{isSelected this.name ../book.author.0.name}}}>{{this.name}}</option>
+    {{/each}}
+  </select>
+
+  {{!-- Single Dropdown list 2. handlebar helpers approach  --}}
+  <select name="author" id="author">
+    <option>Choose an author</option>
+    {{#each allAuthors}}
+      {{#eq this.name ../book.author.0.name}}
+        <option value={{this._id}} selected>{{this.name}}</option>
+      {{else}}
+        <option value={{this._id}}>{{this.name}}</option>
+      {{/eq}}
+    {{/each}}
+  </select>
+  
+{{!-- Multiple Dropdown list custom helper approach  --}}
+  <select name="author" id="author" multiple>
+    <option>Choose an author</option>
+      {{{multipleSelect allAuthors book.author}}}
+  </select>
+  <!--<input type="text" value="{{book.author}}" name="author" >-->
+  
+  <label for="">Description:</label>
+  <input type="text" value="{{book.description}}" name="description">
+  <label for="">Rate:</label>
+  <input type="number" value="{{book.rating}}" name="rating">
+  <button type="submit">EDIT</button>
+</form>
