@@ -38,8 +38,8 @@ app.use(cookieParser());
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "494207660337-1atqsocgpdcfjmog78pkcpih92sdarv3.apps.googleusercontent.com",
-      clientSecret: "XEi7grOxvlUQUOiyil75EVSh",
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
