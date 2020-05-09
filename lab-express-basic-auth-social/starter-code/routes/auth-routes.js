@@ -2,8 +2,25 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const bcryptSalt = 10;
-
+const passport = require('passport');
 const User = require("../models/user");
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  })
+);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/" // here you would redirect to the login page using traditional login approach
+  })
+);
 
 router.get("/signup", (req, res, next) => {
   try {
@@ -22,6 +39,9 @@ router.get("/login", (req, res, next) => {
 });
 
 router.get("/logout", (req, res, next) => {
+  // destroy passport session
+  req.logout();
+  // destroy basic session
   req.session.destroy(() => {
     res.redirect("/login");
   });
@@ -49,15 +69,7 @@ router.post("/login", (req, res, next) => {
       }
 
       if (bcrypt.compareSync(password, user.password)) {
-        console.log('users authenticated');
         req.session.currentUser = user;
-
-        if (req.session.currentUser) {
-          // do something for authenticated user
-        } else {
-          // hide stuff from anonymous users
-        }
-
         res.redirect("/");
       } else {
         res.render("auth/login", {
