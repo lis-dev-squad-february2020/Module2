@@ -10,6 +10,9 @@ const logger       = require('morgan');
 const path         = require('path');
 const session      = require('express-session');
 const MongoStore   = require('connect-mongo')(session);
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const passport      = require('passport');
+const User          = require("./models/user");
 
 mongoose
   .connect('mongodb://localhost/starter-code', {useNewUrlParser: true})
@@ -31,6 +34,33 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+ 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: "494207660337-1atqsocgpdcfjmog78pkcpih92sdarv3.apps.googleusercontent.com",
+      clientSecret: "XEi7grOxvlUQUOiyil75EVSh",
+      callbackURL: "/auth/google/callback",
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOne({ googleID: profile.id })
+        .then(user => {
+          if (user) {
+            done(null, user);
+            return;
+          }
+ 
+          User.create({ googleID: profile.id, username: profile.displayName })
+            .then(newUser => {
+              done(null, newUser);
+            })
+            .catch(err => done(err)); // closes User.create()
+        })
+        .catch(err => done(err)); // closes User.findOne()
+    }
+  )
+);
+
 // Setup authentication session
 app.use(session({
   secret: "lab-express-basic-auth",
@@ -41,6 +71,18 @@ app.use(session({
     ttl: 24 * 60 * 60 // session living on the server - 1day
   })
 }));
+
+passport.serializeUser((user, callback) => {
+  callback(null, user);
+});
+ 
+passport.deserializeUser((user, callback) => {
+  callback(null, user);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // Express View engine setup
 

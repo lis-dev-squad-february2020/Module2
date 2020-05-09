@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: String,
   password: String,
-  role: String
+  role: String,
+  googleID: String
 }, {
   timestamps: true
 });
